@@ -18,7 +18,7 @@ ENV PATH=/root/.nimble/bin:$PATH
 
 # Install nimble packages
 RUN nimble refresh
-RUN nimble install nimcrypto 
+RUN nimble install nimcrypto sysrandom 
 
 
 ENTRYPOINT ["/Mythic/mythic/payload_service.sh"]
