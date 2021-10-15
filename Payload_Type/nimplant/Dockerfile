@@ -17,7 +17,7 @@ RUN curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y
 ENV PATH=/root/.nimble/bin:$PATH
 
 # Install nimble packages
-nimble install nimcrypto 
+RUN nimble install nimcrypto 
 
 
 ENTRYPOINT ["/Mythic/mythic/payload_service.sh"]
