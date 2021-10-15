@@ -98,6 +98,8 @@ class Nimplant(PayloadType):
                 for key, val in c2.get_parameters_dict().items():
                     #if 'https' in val:
                        #is_https = True
+                    resp.build_message = "key: " + key
+                    resp.build_message = "val: " + val
                     if key == 'AESPSK':
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
