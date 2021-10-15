@@ -17,6 +17,7 @@ RUN curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y
 ENV PATH=/root/.nimble/bin:$PATH
 
 # Install nimble packages
+RUN nimble refresh
 RUN nimble install nimcrypto 
 
 
