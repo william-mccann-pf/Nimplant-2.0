@@ -113,7 +113,7 @@ class Nimplant(PayloadType):
                                 file1 = file1.replace(key, val)
                     elif isinstance(val, str):
                         file1 = file1.replace(key, val)
-                        
+
             with open("{}/utils/config.nim".format(agent_build_path.name), 'w') as f:
                 f.write(file1)
 
@@ -122,7 +122,7 @@ class Nimplant(PayloadType):
 
             # TODO research --passL:-W --passL:-ldl
             command = f"nim {'c' if self.get_parameter('lang') == 'C' else 'cpp'} {'--os:linux --passL:-W --passL:-ldl' if self.get_parameter('os') == 'linux' else ''} -f --d:mingw {'--d:debug --hints:on --nimcache:' + agent_build_path.name if self.get_parameter('build') == 'debug' else '--d:release --hints:off'} {'--d:AESPSK=' + aespsk_val  if len(aespsk_val) > 2 else ''} --d:ssl --opt:size --passC:-flto --passL:-flto --passL:-s {'--app:lib' if self.get_parameter('format') == 'dll' else ''} {'--embedsrc:on' if self.get_parameter('build') == 'debug' else ''} --cpu:{'amd64' if self.get_parameter('arch') == 'x64' else 'i386'} --out:{self.name}{out_ext} c2/base.nim"
-            resp.message += f'command: {command} attempting to compile...'
+            resp.build_message += f'command: {command} attempting to compile...'
             proc = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE,
                                     stderr=asyncio.subprocess.PIPE, cwd=agent_build_path.name)
             stdout, stderr = await proc.communicate()
@@ -130,8 +130,8 @@ class Nimplant(PayloadType):
                 output += f'[stdout]\n{stdout.decode()}\n'
             if stderr:
                 output += f'[stderr]\n{stderr.decode()}'
-            resp.message += f'appending output: {output}'
-            resp.message += 'Attempting to zip output'
+            resp.build_message += f'appending output: {output}'
+            resp.build_message += 'Attempting to zip output'
 
 
             # TODO use built in Linux commands to compress files as Python zipping takes too long.
@@ -147,11 +147,11 @@ class Nimplant(PayloadType):
 
 
             resp.payload = open(f'{agent_build_path.name}/{self.name}.zip', 'rb').read()
-            resp.set_message("Successfully Built and Zipped")
+            resp.build_message("Successfully Built and Zipped")
             resp.status = BuildStatus.Success
         except Exception as e:
             import traceback, sys
             exc_type, exc_value, exc_traceback = sys.exc_info()
-            resp.message += f"Error building payload: {e} traceback: " +\
+            resp.build_message += f"Error building payload: {e} traceback: " +\
                            repr(traceback.format_exception(exc_type, exc_value, exc_traceback))
         return resp
