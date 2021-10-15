@@ -106,8 +106,8 @@ class Nimplant(PayloadType):
                         continue
                     if isinstance(val, list):
                         for item in val:
-                            resp.build_message = "key: " + key
-                            resp.build_message = "val: " + val
+                            resp.build_message = "key: " + item["key"]
+                            resp.build_message = "val: " + item["value"]
                             if item["key"] == "Host":
                                 file1 = file1.replace("domain_front", item["value"])
                             elif item["key"] == "User-Agent":
