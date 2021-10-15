@@ -98,8 +98,7 @@ class Nimplant(PayloadType):
                 for key, val in c2.get_parameters_dict().items():
                     #if 'https' in val:
                        #is_https = True
-                    resp.build_message = "key: " + key
-                    resp.build_message = "val: " + val
+                    
                     if key == 'AESPSK':
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
@@ -107,6 +106,8 @@ class Nimplant(PayloadType):
                         continue
                     if isinstance(val, list):
                         for item in val:
+                            resp.build_message = "key: " + key
+                            resp.build_message = "val: " + val
                             if item["key"] == "Host":
                                 file1 = file1.replace("domain_front", item["value"])
                             elif item["key"] == "User-Agent":
@@ -114,6 +115,8 @@ class Nimplant(PayloadType):
                             else:
                                 file1 = file1.replace(key, val)
                     else:
+                        resp.build_message = "key: " + key
+                        resp.build_message = "val: " + val
                         file1 = file1.replace(key, val)
 
             with open("{}/utils/config.nim".format(agent_build_path.name), 'w') as f:
