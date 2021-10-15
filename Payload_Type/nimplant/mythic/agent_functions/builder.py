@@ -111,7 +111,7 @@ class Nimplant(PayloadType):
                                 file1 = file1.replace("USER_AGENT", item["value"])
                             else:
                                 file1 = file1.replace(key, val)
-                    elif isinstance(val, str):
+                    else:
                         file1 = file1.replace(key, val)
 
             with open("{}/utils/config.nim".format(agent_build_path.name), 'w') as f:
