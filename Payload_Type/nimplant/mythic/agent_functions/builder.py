@@ -96,8 +96,8 @@ class Nimplant(PayloadType):
             for c2 in self.c2info:
                 profile = c2.get_c2profile()['name']
                 for key, val in c2.get_parameters_dict().items():
-                    if 'https' in val:
-                        is_https = True
+                    #if 'https' in val:
+                       #is_https = True
                     if key == 'AESPSK':
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
