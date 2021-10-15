@@ -106,18 +106,16 @@ class Nimplant(PayloadType):
                         continue
                     if isinstance(val, list):
                         for item in val:
-                            resp.build_stdout = "key: " + item["key"]
-                            resp.build_stdout = "val: " + item["value"]
                             if item["key"] == "Host":
                                 file1 = file1.replace("domain_front", item["value"])
                             elif item["key"] == "User-Agent":
                                 file1 = file1.replace("USER_AGENT", item["value"])
                             else:
                                 file1 = file1.replace(key, val)
-                    else:
-                        resp.build_stdout = "key: " + key
-                        resp.build_stdout = "val: " + val
+                        continue
+                    if isinstance(val, str):
                         file1 = file1.replace(key, val)
+                        continue
 
             with open("{}/utils/config.nim".format(agent_build_path.name), 'w') as f:
                 f.write(file1)
