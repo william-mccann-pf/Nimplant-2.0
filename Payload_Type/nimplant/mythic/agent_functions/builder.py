@@ -19,12 +19,6 @@ class Atlas(PayloadType):
     supports_dynamic_loading = False  # setting this to True allows users to only select a subset of commands when generating a payload
     build_parameters = {
         #  these are all the build parameters that will be presented to the user when creating your payload
-        "version": BuildParameter(
-            name="version",
-            parameter_type=BuildParameterType.ChooseOne,
-            description="Choose a target .NET Framework",
-            choices=["4.0", "3.5"],
-        ),
         "os": BuildParameter(
             name="os", 
             parameter_type=BuildParameterType.ChooseOne, 
