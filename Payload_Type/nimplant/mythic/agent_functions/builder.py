@@ -7,7 +7,7 @@ import tempfile
 import zipfile
 
 # define your payload type class here, it must extend the PayloadType class though
-class Atlas(PayloadType):
+class Nimplant(PayloadType):
 
     name = "nimplant"  # name that would show up in the UI
     file_extension = "zip"  # default file extension to use when creating payloads
@@ -103,7 +103,17 @@ class Atlas(PayloadType):
                         # AESPSK is a compile time defined value
                         aespsk_val += f'"{val}"'
                         continue
-                    file1 = file1.replace(key, val)
+                    if isinstance(val, list):
+                        for item in val:
+                            if item["key"] == "Host":
+                                file1 = file1.replace("domain_front", item["value"])
+                            elif item["key"] == "User-Agent":
+                                file1 = file1.replace("USER_AGENT", item["value"])
+                            else:
+                                file1 = file1.replace(key, val)
+                    elif isinstance(val, str):
+                        file1 = file1.replace(key, val)
+                        
             with open("{}/utils/config.nim".format(agent_build_path.name), 'w') as f:
                 f.write(file1)
 
