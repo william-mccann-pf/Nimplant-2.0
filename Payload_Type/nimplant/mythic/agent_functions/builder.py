@@ -32,7 +32,7 @@ class Atlas(PayloadType):
             choices=["windows", "linux"]
         ),
 
-        "lang": BuildParameter(n
+        "lang": BuildParameter(
             name="lang", 
             parameter_type=BuildParameterType.ChooseOne,
             description="Choose the language implant will be compiled in",
