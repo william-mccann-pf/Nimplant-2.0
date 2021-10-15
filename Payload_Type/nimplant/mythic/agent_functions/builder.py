@@ -81,7 +81,7 @@ class Atlas(PayloadType):
         ),
     }
     #  the names of the c2 profiles that your agent supports
-    c2_profiles = ["HTTP"]
+    c2_profiles = ["http"]
     # after your class has been instantiated by the mythic_service in this docker container and all required build parameters have values
     # then this function is called to actually build the payload
     async def build(self) -> BuildResponse:
