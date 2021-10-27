@@ -104,8 +104,9 @@ class Nimplant(PayloadType):
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
                         aespsk_val += f'"{val}"'
-                        continue
-                    if isinstance(val, list):
+                    if isinstance(val, dict):
+                        file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
+                    elif isinstance(val, list):
                         for item in val:
                             if item["key"] == "Host":
                                 file1 = file1.replace("domain_front", item["value"])
