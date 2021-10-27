@@ -93,6 +93,7 @@ class Nimplant(PayloadType):
             file1 = file1.replace('%DEFAULT_PROXY%', self.get_parameter('default_proxy'))
             profile = None
             is_https = False
+            crypto = ""
             for c2 in self.c2info:
                 profile = c2.get_c2profile()['name']
                 for key, val in c2.get_parameters_dict().items():
@@ -101,6 +102,7 @@ class Nimplant(PayloadType):
 
                     if isinstance(val, dict):
                         file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
+                        crypto = "encrypt"
                     elif isinstance(val, list):
                         for item in val:
                             if item["key"] == "Host":
@@ -123,7 +125,7 @@ class Nimplant(PayloadType):
                       if self.get_parameter('format') == 'dll' else '.exe'
 
             # TODO research --passL:-W --passL:-ldl
-            command = f"nim {'c' if self.get_parameter('lang') == 'C' else 'cpp'} {'--os:linux --passL:-W --passL:-ldl' if self.get_parameter('os') == 'linux' else ''} -f --d:mingw {'--d:debug --hints:on --nimcache:' + agent_build_path.name if self.get_parameter('build') == 'debug' else '--d:release --hints:off'} --d:ssl --opt:size --passC:-flto --passL:-flto --passL:-flto {'--app:lib' if self.get_parameter('format') == 'dll' else ''} {'--embedsrc:on' if self.get_parameter('build') == 'debug' else ''} --cpu:{'amd64' if self.get_parameter('arch') == 'x64' else 'i386'} --out:{self.name}{out_ext} c2/base.nim"
+            command = f"nim {'c' if self.get_parameter('lang') == 'C' else 'cpp'} {'--os:linux --passL:-W --passL:-ldl' if self.get_parameter('os') == 'linux' else ''} -f --d:mingw {'--d:debug --hints:on --nimcache:' + agent_build_path.name if self.get_parameter('build') == 'debug' else '--d:release --hints:off'} {'--d:CRYPTO=' + crypto  if len(crypto) > 2 else ''} --d:ssl --opt:size --passC:-flto --passL:-flto --passL:-flto {'--app:lib' if self.get_parameter('format') == 'dll' else ''} {'--embedsrc:on' if self.get_parameter('build') == 'debug' else ''} --cpu:{'amd64' if self.get_parameter('arch') == 'x64' else 'i386'} --out:{self.name}{out_ext} c2/base.nim"
             resp.build_message += f'command: {command} attempting to compile...'
             proc = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE,
                                     stderr=asyncio.subprocess.PIPE, cwd=agent_build_path.name)
