@@ -5,6 +5,7 @@ import os
 from distutils.dir_util import copy_tree
 import tempfile
 import zipfile
+import json
 
 # define your payload type class here, it must extend the PayloadType class though
 class Nimplant(PayloadType):
