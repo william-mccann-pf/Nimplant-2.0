@@ -93,17 +93,22 @@ class Nimplant(PayloadType):
             file1 = file1.replace('%DEFAULT_PROXY%', self.get_parameter('default_proxy'))
             profile = None
             is_https = False
-            aespsk_val = ""
             for c2 in self.c2info:
                 profile = c2.get_c2profile()['name']
                 for key, val in c2.get_parameters_dict().items():
                     #if 'https' in val:
                        #is_https = True
                     
-                    #if key == 'AESPSK':
+                    if key == 'AESPSK':
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
                         # aespsk_val += f'"{val}"'
+                        if not isinstance(val, str):
+                            file1 = file1.replace(key, json.dumps(val))
+                       
+                        else:
+                            file1 = file1.replace(key, val)
+
                     if isinstance(val, dict):
                         file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
                     elif isinstance(val, list):
