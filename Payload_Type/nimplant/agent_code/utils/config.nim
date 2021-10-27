@@ -28,10 +28,6 @@ type
       Psk*: string
 
 proc createConfig*() : Config =
-    # Check if compile time defined pragma (PSK) is defined
-    # If defined value will be "AESPSK"
-    # --d:psk=42
-    #const AESPSK {.strdefine.}: string = ""
     var temp = Config(
     CallBackHosts: @["callback_host:callback_port"],
     PayloadUUID: "%UUID%",
