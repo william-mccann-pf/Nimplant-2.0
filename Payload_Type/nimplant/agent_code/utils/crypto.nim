@@ -2,7 +2,7 @@
 # Only need to compile these functions
 # When psk is defined
 
-when defined(AESPSK):
+when defined(CRYPTO):
     import nimcrypto/rijndael
     import nimcrypto/bcmode
     import nimcrypto/hmac
