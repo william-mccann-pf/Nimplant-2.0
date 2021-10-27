@@ -101,7 +101,7 @@ when defined(CRYPTO):
             ctx.decrypt(ecrypt, dcrypt)
             # unpad decrypted result
             var realstring = unpad_buffer(dcrypt, 16)
-            result = uuid & toString(dcrypt)
+            result = uuid & toString(realstring)
             ctx.clear()
         else:
             when not defined(release):
