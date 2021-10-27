@@ -98,16 +98,6 @@ class Nimplant(PayloadType):
                 for key, val in c2.get_parameters_dict().items():
                     #if 'https' in val:
                        #is_https = True
-                    
-                    if key == 'AESPSK':
-                        # AESPSK is defined so update val as
-                        # AESPSK is a compile time defined value
-                        # aespsk_val += f'"{val}"'
-                        if not isinstance(val, str):
-                            file1 = file1.replace(key, json.dumps(val))
-                       
-                        else:
-                            file1 = file1.replace(key, val)
 
                     if isinstance(val, dict):
                         file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
