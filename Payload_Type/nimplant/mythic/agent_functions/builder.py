@@ -100,10 +100,10 @@ class Nimplant(PayloadType):
                     #if 'https' in val:
                        #is_https = True
                     
-                    if key == 'AESPSK':
+                    #if key == 'AESPSK':
                         # AESPSK is defined so update val as
                         # AESPSK is a compile time defined value
-                        aespsk_val += f'"{val}"'
+                        # aespsk_val += f'"{val}"'
                     if isinstance(val, dict):
                         file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
                     elif isinstance(val, list):
