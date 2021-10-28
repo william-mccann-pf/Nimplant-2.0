@@ -2,6 +2,7 @@ import algorithm
 import asyncdispatch
 import base64
 import json
+import re
 from strutils import split
 import ../utils/http
 import ../utils/checkin
