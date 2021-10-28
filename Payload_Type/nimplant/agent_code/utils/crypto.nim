@@ -80,7 +80,7 @@ when defined(CRYPTO):
         let uuidLen = len(uuid)
         let passeduuid = decoded[0 .. uuidLen]
         let iv = decoded[uuidLen .. uuidLen + 15]
-        let ciphertext = decoded[uuidLen + 16 .. len(decoded) - 33]
+        let ciphertext = decoded[uuidLen + 16 .. len(decoded) - 32]
         let hmac = decoded[^32 .. ^1] # sha256 hmac at the end
         
         let encrypted = concat(toByteSeq(iv), toByteSeq(ciphertext))
