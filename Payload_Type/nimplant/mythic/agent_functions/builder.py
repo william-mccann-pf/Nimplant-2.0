@@ -103,7 +103,8 @@ class Nimplant(PayloadType):
                     if key == 'AESPSK':
                         if isinstance(val, dict):
                             file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
-                            crypto = "encrypt"
+                            if val["enc_key"] is not None:
+                                crypto = "encrypt"
                     elif isinstance(val, list):
                         for item in val:
                             if item["key"] == "Host":
