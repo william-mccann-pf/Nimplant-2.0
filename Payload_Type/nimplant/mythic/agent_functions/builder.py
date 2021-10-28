@@ -93,7 +93,7 @@ class Nimplant(PayloadType):
             file1 = file1.replace('%DEFAULT_PROXY%', self.get_parameter('default_proxy'))
             profile = None
             is_https = False
-            var crypto = ""
+            crypto = ""
             for c2 in self.c2info:
                 profile = c2.get_c2profile()['name']
                 for key, val in c2.get_parameters_dict().items():
