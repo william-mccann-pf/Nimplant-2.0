@@ -93,16 +93,17 @@ class Nimplant(PayloadType):
             file1 = file1.replace('%DEFAULT_PROXY%', self.get_parameter('default_proxy'))
             profile = None
             is_https = False
-            crypto = ""
+            var crypto = ""
             for c2 in self.c2info:
                 profile = c2.get_c2profile()['name']
                 for key, val in c2.get_parameters_dict().items():
                     #if 'https' in val:
                        #is_https = True
 
-                    if isinstance(val, dict):
-                        file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
-                        crypto = "encrypt"
+                    if key == 'AESPSK':
+                        if isinstance(val, dict):
+                            file1 = file1.replace(key, val["enc_key"] if val["enc_key"] is not None else "")
+                            crypto = "encrypt"
                     elif isinstance(val, list):
                         for item in val:
                             if item["key"] == "Host":
